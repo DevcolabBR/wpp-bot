@@ -1,12 +1,18 @@
 #!usr/bin/env python3
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __author__ = "r0bert"
 __license__ = "Unlicense"
 
 # %%
 # import bibliotecas
 import openpyxl
+from urllib.parse import quote
+import webbrowser
+from time import sleep
+
+webbrowser.open("https://web.whatsapp.com")
+sleep(5)
 
 # importando tabelas
 workbook = openpyxl.load_workbook("tabela.xlsx")
@@ -42,12 +48,15 @@ def corrigir_numero(numero):
 for linha in pagina_clientes.iter_rows(min_row=2):
     nome = linha[0].value
     telefone = str(linha[1].value)  # Convertendo telefone para string
-    data = linha[2].value
+    vencimento = linha[2].value
 
     telefone_corrigido = corrigir_numero(telefone)
+    mensagem = f"""Olá {nome}, seu boleto vence no dia {vencimento.strftime('%d/%m/%Y')}. Por favor, pagar no link
+    https://www.link_do_pagamento.com """
+    # print(nome)
+    # print(telefone_corrigido)
+    # print(vencimento)
 
-    print(nome)
-    print(telefone_corrigido)
-    print(data)
-
+    link_mensagem_wpp = f'https://web.whatsapp.com/send?phone={telefone_corrigido}&text={quote(mensagem)}'
+    webbrowser.open(link_mensagem_wpp)
 # %%
