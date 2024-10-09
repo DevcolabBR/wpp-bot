@@ -10,7 +10,9 @@ import openpyxl
 from urllib.parse import quote
 import webbrowser
 from time import sleep
-
+import pyautogui
+import pillow
+#%%
 webbrowser.open("https://web.whatsapp.com")
 sleep(5)
 
@@ -57,6 +59,18 @@ for linha in pagina_clientes.iter_rows(min_row=2):
     # print(telefone_corrigido)
     # print(vencimento)
 
-    link_mensagem_wpp = f'https://web.whatsapp.com/send?phone={telefone_corrigido}&text={quote(mensagem)}'
-    webbrowser.open(link_mensagem_wpp)
-# %%
+
+try:
+        link_mensagem_wpp = f'https://web.whatsapp.com/send?phone={telefone_corrigido}&text={quote(mensagem)}'
+        webbrowser.open(link_mensagem_wpp)
+        sleep(10)
+        seta = pyautogui.locateCenterOnScreen('seta.jpeg')
+        sleep(5)
+        pyautogui.click(seta[0], seta[1])
+        sleep(5)
+        pyautogui.hotkey('ctrl', 'w') # pra fechar a aba
+
+except: 
+    print("Não foi possível enviar mensagem para {nome}")
+    with open('erros.csv', 'a', newline='', encoding='utf-8') as arquivo_erros:
+        arquivo_erros.write(f"{nome};{telefone}\n")
